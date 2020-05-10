@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Mypage.ChangeProfileActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/profilelayout"
+        android:visibility="visible">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/profileimg"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            app:srcCompat="@drawable/profileimg"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/camerabackgrd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/camerbackgrd"
+            android:layout_marginTop="42dp"
+            android:layout_marginStart="45dp"
+            app:layout_constraintStart_toStartOf="@+id/profileimg"
+            app:layout_constraintTop_toTopOf="@+id/profileimg"/>
+
+        <ImageView
+            android:id="@+id/cameraimg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/cameraimg"
+            android:layout_marginTop="49dp"
+            android:layout_marginStart="52dp"
+            app:layout_constraintStart_toStartOf="@+id/profileimg"
+            app:layout_constraintTop_toTopOf="@+id/profileimg"/>
+
+        <TextView
+            android:id="@+id/texttrash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="안녕하세요,"
+            android:textSize="22dp"
+            android:layout_marginTop="14dp"
+            android:textColor="#909FBB"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="@id/profileimg"
+            app:layout_constraintTop_toBottomOf="@id/profileimg" />
+
+
+        <EditText
+            android:id="@+id/nicknametext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/nicknamerec"
+            android:hint="넙죽이001"
+            android:textColorHint="#0AA864"
+            android:textSize="22dp"
+            android:layout_marginTop="5dp"
+            android:textColor="#0AA864"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="@id/texttrash"
+            app:layout_constraintTop_toBottomOf="@id/texttrash"  />
+
+        <TextView
+            android:id="@+id/texttrash2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="입니다."
+            android:textSize="22dp"
+            android:layout_marginTop="5dp"
+            android:textColor="#909FBB"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="@id/texttrash"
+            app:layout_constraintTop_toBottomOf="@id/nicknametext" />
+
+        <TextView
+            android:id="@+id/revised"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="수정 완료"
+            android:textSize="14dp"
+            android:textColor="#0AA864"
+            android:layout_marginEnd="20dp"
+            android:onClick="revised"
+            app:layout_constraintTop_toBottomOf="@id/texttrash2"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="닫기"
+            android:textSize="14dp"
+            android:textColor="#909FBB"
+            android:layout_marginEnd="20dp"
+            android:onClick="close"
+            app:layout_constraintTop_toBottomOf="@id/texttrash2"
+            app:layout_constraintEnd_toStartOf="@id/revised"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

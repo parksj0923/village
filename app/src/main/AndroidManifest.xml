@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ver0.village">
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".Mypage.ChangeProfileActivity"></activity>
+        <activity android:name=".Trade.LendStatus5Activity" />
+        <activity android:name=".Trade.LendStatus4Activity" />
+        <activity android:name=".Trade.LendStatus3Activity" />
+        <activity android:name=".Trade.LendStatus2Activity" />
+        <activity android:name=".Trade.LendStatus1Activity" />
+        <activity android:name=".Trade.BorrowStatus1Activity" />
+        <activity android:name=".Trade.TradeDetailActivity" />
+        <activity android:name=".Item.ItemReservationActivity" />
+        <activity android:name=".Mypage.MyHeartItemActivity" />
+        <activity android:name=".Mypage.MyPostActivity" />
+        <activity android:name=".Mypage.MyProfileActivity" />
+        <activity android:name=".Mypage.FavoriteKeywordActivity" />
+        <activity android:name=".Mypage.FavoriteCategoryActivity" />
+        <activity android:name=".Mypage.ContactType4Activity" />
+        <activity android:name=".Mypage.ContactType3Activity" />
+        <activity android:name=".Mypage.ContactType2Activity" />
+        <activity android:name=".Mypage.ContactType1Activity" />
+        <activity android:name=".Mypage.ContactVillageActivity" />
+        <activity android:name=".WritingUpload.WritingActivity" />
+        <activity android:name=".MainFragment.HomeFragmentSearchActivity" />
+        <activity android:name=".Chat.ChatInsideActivity" />
+        <activity android:name=".Item.ItemDetailActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".IntroActivity" />
+        <activity android:name=".TabActivity" />
+        <activity android:name=".Alarm.AlarmActivity" />
+        <activity android:name=".SplashscreenActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- Image Picker activity -->
+        <activity android:name=".ImagePickerActivity" /> <!-- uCrop cropping activity -->
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" /> <!-- cache directory file provider paths -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+    </application>
+
+</manifest>

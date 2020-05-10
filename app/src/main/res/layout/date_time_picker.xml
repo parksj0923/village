@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:paddingBottom="12dp"
+    android:layout_height="wrap_content">
+
+    <NumberPicker
+        android:id="@+id/picker_date"
+        android:layout_width="90dp"
+        android:layout_height="150dp"
+        android:layout_marginEnd="30dp"
+        android:descendantFocusability="blocksDescendants"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintEnd_toStartOf="@id/picker_am_pm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <NumberPicker
+        android:id="@+id/picker_am_pm"
+        android:layout_width="60dp"
+        android:layout_height="150dp"
+        android:layout_marginEnd="15dp"
+        android:descendantFocusability="blocksDescendants"
+        app:layout_constraintStart_toEndOf="@id/picker_date"
+        app:layout_constraintEnd_toStartOf="@id/picker_hour"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <NumberPicker
+        android:id="@+id/picker_hour"
+        android:layout_width="60dp"
+        android:layout_height="150dp"
+        android:layout_marginEnd="5dp"
+        android:descendantFocusability="blocksDescendants"
+        app:layout_constraintStart_toEndOf="@id/picker_am_pm"
+        app:layout_constraintEnd_toStartOf="@id/hour_minute_devide"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/hour_minute_devide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":"
+        android:textColor="#3B4861"
+        android:textSize="18sp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintStart_toEndOf="@id/picker_hour"
+        app:layout_constraintEnd_toStartOf="@id/picker_minute"
+        app:layout_constraintTop_toTopOf="@id/picker_hour"
+        app:layout_constraintBottom_toBottomOf="@id/picker_hour"/>
+
+    <NumberPicker
+        android:id="@+id/picker_minute"
+        android:layout_width="60dp"
+        android:layout_height="150dp"
+        android:layout_marginEnd="21dp"
+        android:descendantFocusability="blocksDescendants"
+        app:layout_constraintStart_toEndOf="@id/hour_minute_devide"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/complete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="완료"
+        android:textColor="#0AA864"
+        android:textSize="14sp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="@id/picker_minute"
+        app:layout_constraintTop_toBottomOf="@id/picker_minute"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

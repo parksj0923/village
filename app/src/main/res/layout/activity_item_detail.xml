@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorBackground">
+
+
+
+    <ImageView
+        android:id="@+id/prev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="prevBtnClick"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="@dimen/top_margin_bigicon"
+        app:srcCompat="@drawable/back_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/option"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/top_margin_smallicon"
+        android:layout_marginEnd="26dp"
+        app:srcCompat="@drawable/option_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/share_icon"
+        android:layout_marginEnd="13dp"
+        android:layout_marginTop="@dimen/top_margin_bigicon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/option"/>
+
+    <ImageView
+        android:id="@+id/devideline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/graylinetodevide"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/option"/>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/reservationBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/devideline">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="360dp"
+                android:paddingBottom="20dp"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="6dp">
+
+            </androidx.viewpager.widget.ViewPager>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="7dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintBottom_toBottomOf="@id/viewPager"
+                app:tabBackground="@drawable/tab_selector"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp"/>
+
+            <ImageView
+                android:id="@+id/devideline2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/graylinetodevide"
+                app:layout_constraintTop_toBottomOf="@id/viewPager"/>
+
+
+            <include
+                android:id="@+id/userinfo"
+                layout="@layout/user_info_itemdetail"
+                android:layout_width="405dp"
+                android:layout_height="68dp"
+                app:layout_constraintTop_toBottomOf="@id/devideline2"
+                tools:layout_editor_absoluteX="6dp" />
+
+            <ImageView
+                android:id="@+id/devideline3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/graylinetodevide"
+                app:layout_constraintTop_toBottomOf="@id/userinfo"/>
+
+            <include
+                layout="@layout/item_info"
+                android:id="@+id/iteminfo"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                app:layout_constraintTop_toBottomOf="@id/devideline3" />
+
+            <ImageView
+                android:id="@+id/devideline4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/graylinetodevide"
+                app:layout_constraintTop_toBottomOf="@id/iteminfo"/>
+
+            <include
+                android:id="@+id/user_otheritem"
+                layout="@layout/user_otheritem_itemdetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/devideline4"
+                app:layout_constraintVertical_bias="0.0"
+                tools:layout_editor_absoluteX="0dp" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#F0F2F6"
+        android:id="@+id/costlayout"
+        app:layout_constraintTop_toTopOf="@id/reservationBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/reservationBtn">
+
+        <ImageView
+            android:id="@+id/clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="prevBtnClick"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="9dp"
+            app:srcCompat="@drawable/img_clock"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+        <TextView
+            android:id="@+id/text111"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1시간"
+            android:textColor="#909FBB"
+            android:textSize="8sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="4dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/clock"/>
+
+        <TextView
+            android:id="@+id/text_hour_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3000원"
+            android:textColor="#3B4861"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="21dp"
+            app:layout_constraintTop_toBottomOf="@id/clock"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
+            android:id="@+id/calander"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="prevBtnClick"
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="8dp"
+            app:srcCompat="@drawable/img_calendar"
+            app:layout_constraintEnd_toStartOf="@id/text222"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/text222"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1일"
+            android:textColor="#909FBB"
+            android:textSize="8sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="43dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/text_day_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15000원"
+            android:textColor="#3B4861"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="26dp"
+            app:layout_constraintTop_toBottomOf="@id/calander"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/reservationBtn"
+        android:layout_width="0dp"
+        android:layout_height="47dp"
+        android:gravity="center"
+        android:background="#0AA864"
+        android:text="연락하기"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#F0F2F6"
+        android:onClick="reservation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/costlayout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

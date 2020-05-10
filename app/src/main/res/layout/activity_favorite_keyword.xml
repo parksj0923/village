@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Mypage.FavoriteKeywordActivity">
+
+    <TextView
+        android:id="@+id/title2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="키워드 등록"
+        android:textSize="22sp"
+        android:textColor="#909FBB"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="38dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/icon_close"
+        android:layout_marginTop="43dp"
+        android:layout_marginEnd="21dp"
+        android:onClick="close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="키워드를 등록해두면, 해당 키워드와 관련된 대여글이 올라올 때 마다 알림을 받을 수 있어요"
+        android:textSize="12sp"
+        android:textColor="#909FBB"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="38dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title2"/>
+
+    <EditText
+        android:id="@+id/keyword_edittext"
+        android:paddingStart="20dp"
+        android:hint="키워드 등록하기"
+        android:textSize="16sp"
+        android:textColor="#3B4861"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/keyword_searchbox"
+        android:layout_marginTop="43dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/subtitle"/>
+
+    <ImageView
+        android:id="@+id/add_keyword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/icon_close"
+        android:layout_marginEnd="21dp"
+        android:onClick="addKeyword"
+        app:layout_constraintEnd_toEndOf="@id/keyword_edittext"
+        app:layout_constraintTop_toTopOf="@id/keyword_edittext"
+        app:layout_constraintBottom_toBottomOf="@id/keyword_edittext"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

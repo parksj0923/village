@@ -1,0 +1,103 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingBottom="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:id="@+id/img_user"
+        android:layout_width="47dp"
+        android:layout_height="47dp"
+        android:background="@drawable/sample_userimg_chat"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_item"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="29dp"
+        android:layout_marginTop="24dp"
+        app:srcCompat="@drawable/sample_camera_chat"
+        app:layout_constraintStart_toStartOf="@id/img_user"
+        app:layout_constraintTop_toTopOf="@id/img_user" />
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="박성주"
+        android:textSize="14sp"
+        android:textColor="#3B4861"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="18dp"
+        app:layout_constraintStart_toEndOf="@+id/img_item"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cannon EOS 80D DSLR "
+        android:textSize="12sp"
+        android:textColor="#909FBB"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="18dp"
+        app:layout_constraintStart_toEndOf="@+id/user_name"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/chat_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10분전"
+        android:textSize="10sp"
+        android:textColor="#909FBB"
+        android:layout_marginEnd="28dp"
+        android:layout_marginTop="21dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/last_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="안녕하세요!! 그 아이패드"
+        android:textSize="12sp"
+        android:textColor="#909FBB"
+        android:layout_marginTop="3dp"
+        app:layout_constraintStart_toStartOf="@+id/user_name"
+        app:layout_constraintTop_toBottomOf="@id/user_name" />
+
+
+    <ImageView
+        android:id="@+id/chat_alarm_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="6dp"
+        app:srcCompat="@drawable/alarmcircle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chat_time"  />
+
+    <TextView
+        android:id="@+id/chat_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5"
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@id/chat_alarm_background"
+        app:layout_constraintEnd_toEndOf="@id/chat_alarm_background"
+        app:layout_constraintTop_toTopOf="@id/chat_alarm_background"
+        app:layout_constraintBottom_toBottomOf="@id/chat_alarm_background"/>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

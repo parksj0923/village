@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:id="@+id/img_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        app:srcCompat="@drawable/icon_electroinc"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/text_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="전자제품"
+        android:textColor="#909FBB"
+        android:textSize="12sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="3dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/img_category"/>
+
+    <TextView
+        android:id="@+id/item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cannon EOS 80D DSLR 카메라"
+        android:textColor="#3B4861"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@id/img_category"
+        app:layout_constraintStart_toStartOf="@id/img_category"/>
+
+    <TextView
+        android:id="@+id/tttext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="상세설명"
+        android:textSize="10sp"
+        android:textColor="#909FBB"
+        android:layout_marginTop="17dp"
+        app:layout_constraintStart_toStartOf="@+id/img_category"
+        app:layout_constraintTop_toBottomOf="@id/item_name" />
+
+    <TextView
+        android:id="@+id/item_information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="17dp"
+        android:paddingLeft="20dp"
+        android:text="구매한지 얼마 안 된 최신 DSLR 카메라 입니다. 저렴한 대여 가격으로 최상의 사진을 찍을 수 있게 해줄겁니다."
+        android:textSize="12sp"
+        android:textColor="#3B4861"
+        android:layout_marginTop="7dp"
+        app:layout_constraintTop_toBottomOf="@id/tttext" />
+
+    <ImageView
+        android:id="@+id/img_heart_or_not"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/heart_white"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

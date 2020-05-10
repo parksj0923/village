@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#6AA855"
+    android:layout_gravity="center"
+    android:id="@+id/lin_lay"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/splash_name"
+        android:layout_width="180dp"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:text="안전하고 간편하게"
+        android:textSize="20dp"
+        android:textColor="#C6FABD"/>
+
+    <TextView
+        android:id="@+id/splash_title"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:text="빌리지"
+        android:gravity="center"
+        android:textSize="50dp"
+        android:textStyle="bold"
+        android:textColor="#F4F5F7"/>
+
+    <ImageView
+        android:id="@+id/splash"
+        android:layout_width="302dp"
+        android:layout_height="338dp"
+        android:background="@drawable/emoticon1" />
+
+</LinearLayout>

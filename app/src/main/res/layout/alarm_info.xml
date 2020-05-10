@@ -1,0 +1,63 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingBottom="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:id="@+id/img_alarm"
+        android:layout_width="47dp"
+        android:layout_height="47dp"
+        android:background="@drawable/alarm_time"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="11dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/alarm_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="공지사항 제목"
+        android:textSize="14sp"
+        android:textColor="#000000"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="11dp"
+        app:layout_constraintStart_toEndOf="@+id/img_alarm"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/alarm_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="공지사항 본문의 일부"
+        android:textSize="12sp"
+        android:textColor="#909FBB"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="@+id/alarm_title"
+        app:layout_constraintTop_toBottomOf="@id/alarm_title" />
+
+    <TextView
+        android:id="@+id/alarm_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10분전"
+        android:textSize="10sp"
+        android:textColor="#909FBB"
+        android:layout_marginEnd="28dp"
+        android:layout_marginTop="23dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

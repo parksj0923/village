@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+
+    <Button
+        android:id="@+id/bottombutton"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:background="#F0F2F6"
+        android:gravity="center"
+        android:text="대학교 선택하기"
+        android:textColor="#909FBB"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:onClick="bottombuttononClick"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="47dp"
+        app:layout_constraintStart_toEndOf="@+id/logindot1"
+        app:layout_constraintEnd_toStartOf="@+id/logindot4"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/loginline"/>
+
+
+
+
+
+
+    <ImageView
+        android:id="@+id/logindot1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintEnd_toStartOf="@+id/logindot2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logindot_black" />
+
+    <ImageView
+        android:id="@+id/logindot2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toStartOf="@+id/logindot3"
+        app:layout_constraintStart_toEndOf="@id/logindot1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logindot_gray" />
+
+    <ImageView
+        android:id="@+id/logindot3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toStartOf="@+id/logindot4"
+        app:layout_constraintStart_toEndOf="@id/logindot2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logindot_gray" />
+
+    <ImageView
+        android:id="@+id/logindot4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/logindot3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logindot_gray" />
+
+    <TextView
+        android:id="@+id/logintext1"
+        android:layout_width="84dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="58dp"
+        android:gravity="center"
+        android:text="휴대폰 인증"
+        android:textColor="#3B4861"
+        android:textSize="12dp"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintEnd_toStartOf="@+id/logintext2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/logintext2"
+        android:layout_width="84dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="58dp"
+        android:gravity="center"
+        android:text="대학교 선택"
+        android:textColor="#909FBB"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toStartOf="@+id/logintext3"
+        app:layout_constraintStart_toEndOf="@+id/logintext1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/logintext3"
+        android:layout_width="84dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="58dp"
+        android:gravity="center"
+        android:text="대학교 인증"
+        android:textColor="#909FBB"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toStartOf="@+id/logintext4"
+        app:layout_constraintStart_toEndOf="@+id/logintext2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/logintext4"
+        android:layout_width="84dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="58dp"
+        android:gravity="center"
+        android:text="프로필 설정"
+        android:textColor="#909FBB"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/logintext3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/logintitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="휴대폰 인증"
+        android:textSize="22dp"
+        android:textColor="#3B4861"
+        android:gravity="center"
+        android:layout_marginTop="112dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="빌리지는 휴대폰에 등록된 번호를 통해\n아이디를 생성하고 로그인합니다."
+        android:textSize="14dp"
+        android:textColor="#909FBB"
+        android:gravity="center"
+        android:layout_marginTop="150dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/phonelayout"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/phonetext1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="당신의 아이디는 다음과 같습니다."
+            android:textSize="14dp"
+            android:textColor="#909FBB"
+            android:gravity="center"
+            android:layout_marginTop="230dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/phonetext2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="* 걱정마세요! 외부에 공개되지 않습니다."
+            android:textSize="12dp"
+            android:textColor="#E60A0A"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/phonetext1" />
+
+        <TextView
+            android:id="@+id/phonenumtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="010-0000-0000"
+            android:textSize="20dp"
+            android:textColor="#3B4861"
+            android:gravity="center"
+            android:layout_marginTop="289dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/phonenumline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/phonenumtext"/>
+
+        <ImageView
+            android:id="@+id/namerec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/namerectan"
+            android:layout_marginTop="376dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/bottomline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/bottomline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/namerec"/>
+
+        <TextView
+            android:id="@+id/textViewname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이름 입력"
+            android:textSize="12dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginStart="9dp"
+            android:textColor="#0AA864"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="@id/namerec"
+            app:layout_constraintTop_toTopOf="@id/namerec" />
+
+        <EditText
+            android:id="@+id/nameText"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="성함을 입력해주세요"
+            android:textSize="16dp"
+            android:textColorHint="#909FBB"
+            android:textColor="#3B4861"
+            android:gravity="left"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintStart_toStartOf="@id/textViewname"
+            app:layout_constraintBottom_toBottomOf="@id/namerec" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/univselectlayout"
+        android:visibility="gone">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="250dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/univconfirmlayout"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/emailrec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/emailrec"
+            android:layout_marginTop="253dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+
+
+        <TextView
+            android:id="@+id/textViewname3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="인증번호 입력"
+            android:textSize="12dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginStart="9dp"
+            android:textColor="#0AA864"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="@id/emailrec"
+            app:layout_constraintTop_toTopOf="@id/emailrec" />
+
+        <EditText
+            android:id="@+id/emailText"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="이메일로 전송된 인증번호를 입력해주세요."
+            android:textSize="16dp"
+            android:textColorHint="#909FBB"
+            android:textColor="#3B4861"
+            android:gravity="left"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintStart_toStartOf="@id/textViewname3"
+            app:layout_constraintBottom_toTopOf="@id/bottomline4" />
+
+        <ImageView
+            android:id="@+id/bottomline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/bottomline"
+            android:layout_marginBottom="7dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/emaildomain"/>
+
+        <TextView
+            android:id="@+id/emaildomain"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:text="\@example.go.kr"
+            android:textSize="16dp"
+            android:textColor="#909FBB"
+            android:gravity="left"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintStart_toStartOf="@id/textViewname3"
+            app:layout_constraintBottom_toBottomOf="@id/emailrec" />
+
+        <ImageView
+            android:id="@+id/bottomline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/bottombargray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/emailrec"/>
+
+        <TextView
+            android:id="@+id/requestemail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="인증번호 요청하기"
+            android:textSize="14dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginStart="9dp"
+            android:textColor="#909FBB"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="@id/emailrec"
+            app:layout_constraintTop_toBottomOf="@id/emailrec" />
+
+
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/confirmnumlayout"
+                android:visibility="gone">
+
+
+                <ImageView
+                    android:id="@+id/confirmrec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/namerectan"
+                    android:layout_marginTop="393dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <ImageView
+                    android:id="@+id/bottomline2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/bottomline"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/confirmrec"/>
+
+                <TextView
+                    android:id="@+id/textViewname2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="인증번호 입력"
+                    android:textSize="12dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginStart="9dp"
+                    android:textColor="#0AA864"
+                    android:gravity="center"
+                    app:layout_constraintStart_toStartOf="@id/confirmrec"
+                    app:layout_constraintTop_toTopOf="@id/confirmrec" />
+
+                <EditText
+                    android:id="@+id/confirmText"
+                    android:layout_width="320dp"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="이메일로 전송된 인증번호를 입력해주세요."
+                    android:textSize="16dp"
+                    android:textColorHint="#909FBB"
+                    android:textColor="#3B4861"
+                    android:gravity="left"
+                    android:inputType="number"
+                    android:layout_marginBottom="5dp"
+                    app:layout_constraintStart_toStartOf="@id/textViewname2"
+                    app:layout_constraintBottom_toBottomOf="@id/confirmrec" />
+
+
+
+                <TextView
+                    android:id="@+id/confirmmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="인증번호 확인하기"
+                    android:textSize="14dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginStart="9dp"
+                    android:textColor="#0AA864"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="@id/confirmrec"
+                    app:layout_constraintTop_toBottomOf="@id/confirmrec" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/profilelayout"
+        android:visibility="visible">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/profileimg"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            app:srcCompat="@drawable/profileimg"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="130dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/camerabackgrd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/camerbackgrd"
+            android:layout_marginTop="42dp"
+            android:layout_marginStart="45dp"
+            app:layout_constraintStart_toStartOf="@+id/profileimg"
+            app:layout_constraintTop_toTopOf="@+id/profileimg"/>
+
+        <ImageView
+            android:id="@+id/cameraimg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/cameraimg"
+            android:layout_marginTop="49dp"
+            android:layout_marginStart="52dp"
+            app:layout_constraintStart_toStartOf="@+id/profileimg"
+            app:layout_constraintTop_toTopOf="@+id/profileimg"/>
+
+        <TextView
+            android:id="@+id/texttrash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="안녕하세요,"
+            android:textSize="22dp"
+            android:layout_marginTop="14dp"
+            android:textColor="#909FBB"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="@id/profileimg"
+            app:layout_constraintTop_toBottomOf="@id/profileimg" />
+
+
+        <EditText
+            android:id="@+id/nicknametext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/nicknamerec"
+            android:hint="넙죽이001"
+            android:textColorHint="#0AA864"
+            android:textSize="22dp"
+            android:layout_marginTop="5dp"
+            android:textColor="#0AA864"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="@id/texttrash"
+            app:layout_constraintTop_toBottomOf="@id/texttrash"  />
+
+        <TextView
+            android:id="@+id/texttrash2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="입니다."
+            android:textSize="22dp"
+            android:layout_marginTop="5dp"
+            android:textColor="#909FBB"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="@id/texttrash"
+            app:layout_constraintTop_toBottomOf="@id/nicknametext" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
