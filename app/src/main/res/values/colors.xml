@@ -20,4 +20,6 @@
 
     <color name="colorSelect">#C7504B</color>
     <color name="colorUnselect">#B0B0B0</color>
+
+    <color name="colorChatTitle">#3B4861</color>
 </resources>

@@ -1,61 +1,66 @@
 package ver0.village.Chat;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import androidx.recyclerview.widget.RecyclerView;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 
 import ver0.village.R;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
 public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerViewAdapter.ViewHolder> {
-    private ArrayList<ChatItem> itemList = new ArrayList<ChatItem>();
-    Context context;
+    private ArrayList<ChatData> itemList = new ArrayList<ChatData>();
+    private Bitmap profileImage;
+    private String id;
 
-    private static ChatRecyclerViewAdapter.ClickListener clickListener;
-
-    public interface ClickListener{
-        void onItemClick(int position, View v);
+    public ChatRecyclerViewAdapter(ArrayList<ChatData> chatDataArrayList, String id){
+        this.itemList = chatDataArrayList;
+        this.id = id;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
+    public ChatRecyclerViewAdapter(ArrayList<ChatData> chatDataArrayList, Bitmap profileImage){
+        this.itemList = chatDataArrayList;
+        this.profileImage = profileImage;
+    }
 
+    public class ViewHolder extends RecyclerView.ViewHolder {
         View totalView;;
-        TextView text_username, text_itemname, text_lastchat, text_lastchat_time, text_alarmnum;
-        ImageView img_user, img_item;
+        ConstraintLayout my_layout, op_layout;
+        TextView text_my_chat, text_op_chat, text_my_datetime, text_op_datetime, text_my_read;
+        ImageView profile_image;
 
         public ViewHolder(View view){
             super(view);
-            view.setOnClickListener(this);
 
             totalView = view;
 
-            text_itemname = view.findViewById(R.id.item_name);
-            text_username = view.findViewById(R.id.user_name);
-            text_lastchat = view.findViewById(R.id.last_chat);
-            text_lastchat_time = view.findViewById(R.id.chat_time);
-            text_alarmnum = view.findViewById(R.id.chat_alarm);
+            my_layout = view.findViewById(R.id.layout_my_chat);
+            op_layout = view.findViewById(R.id.layout_op_chat);
 
-            img_user = view.findViewById(R.id.img_user);
-            img_item = view.findViewById(R.id.img_item);
+            text_my_chat = view.findViewById(R.id.text_my_message);
+            text_op_chat = view.findViewById(R.id.text_op_message);
+            text_my_datetime = view.findViewById(R.id.text_my_datetime);
+            text_op_datetime = view.findViewById(R.id.text_op_datetime);
+            text_my_read = view.findViewById(R.id.text_my_read);
+            profile_image = view.findViewById(R.id.image_op_profile);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
 
         }
-
-        @Override
-        public void onClick(View v){
-            clickListener.onItemClick(getAdapterPosition(), v);
-        }
-    }
-
-
-    public ChatRecyclerViewAdapter(){
-
     }
 
     @Override
@@ -65,8 +70,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
 
     @Override
     public ChatRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_main, parent, false);
-        context = parent.getContext();
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat, parent, false);
         ChatRecyclerViewAdapter.ViewHolder holder = new ChatRecyclerViewAdapter.ViewHolder(v);
         return holder;
     }
@@ -74,54 +78,38 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
     @Override
     public void onBindViewHolder(final ChatRecyclerViewAdapter.ViewHolder holder, final int position){
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
-        final ChatItem item = itemList.get(position);
+        final ChatData item = itemList.get(position);
 
-
-        holder.text_itemname.setText(item.getItem_name());
-        holder.text_username.setText(item.getUser_name());
-        holder.text_lastchat.setText(item.getLast_chat());
-        holder.text_alarmnum.setText(""+item.getAlarm_num());
-
-        int time = item.getLast_chat_time();
-        if(time < 60){
-            holder.text_lastchat_time.setText(""+time+"분 전");
-        } else if(time >= 60 && time < 1440){
-            holder.text_lastchat_time.setText(""+time/60+"시간 전");
-        } else if(time >= 1440){
-            holder.text_lastchat_time.setText(""+time/1440+"일 전");
-        } else{
-            holder.text_lastchat_time.setText("time error");
+        Boolean isMine = TRUE;
+        String sender = item.getsender();
+        if(!sender.equals(id)){
+            isMine = FALSE;
         }
 
-        holder.img_user.setBackground(item.getImg_user());
-        holder.img_item.setBackground(item.getImg_item());
+        if(isMine){
+            holder.op_layout.setVisibility(View.GONE);
+//            if(item.getRead()) holder.text_my_read.setText("읽음");
+//            holder.text_my_datetime.setText(item.getDatetime());
+            holder.text_my_chat.setText(item.getMessage());
+        } else{
+            holder.my_layout.setVisibility(View.GONE);
+//            holder.profile_image.setImageBitmap(profileImage);
+            holder.text_op_chat.setText(item.getMessage());
+//            holder.text_op_datetime.setText(item.getDatetime());
+        }
 
         holder.totalView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, ChatInsideActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                context.startActivity(intent);
             }
         });
     }
 
-    // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(String item_name, String user_name, String last_chat, int last_chattime, int alarmnum, Drawable img_item, Drawable img_user) {
-        ChatItem item = new ChatItem();
-        item.setItem_name(item_name);
-        item.setUser_name(user_name);
-        item.setLast_chat(last_chat);
-        item.setLast_chat_time(last_chattime);
-        item.setAlarm_num(alarmnum);
-        item.setImg_user(img_user);
-        item.setImg_item(img_item);
-
+    public void addChatItem(String sender, String message, String datetime) {
+        ChatData item = new ChatData();
+        item.setSender(sender);
+        item.setMessage(message);
+        item.setDatetime(datetime);
         itemList.add(item);
-    }
-
-
-    public void setOnItemClickListener(ChatRecyclerViewAdapter.ClickListener clickListener){
-        ChatRecyclerViewAdapter.clickListener = clickListener;
     }
 }
