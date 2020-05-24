@@ -2,19 +2,20 @@ package ver0.village.Item;
 
 import android.content.Context;
 import android.content.Intent;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 
-import ver0.village.R;
-
 import java.util.ArrayList;
+
+import ver0.village.R;
 
 public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerViewAdapter.ViewHolder> {
     private ArrayList<HomeItem> itemList = new ArrayList<HomeItem>();

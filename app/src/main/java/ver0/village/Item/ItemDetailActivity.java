@@ -1,18 +1,20 @@
 package ver0.village.Item;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import com.google.android.material.tabs.TabLayout;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -34,12 +36,17 @@ public class ItemDetailActivity extends AppCompatActivity {
     ImageView category_img, profile_img;
     RecyclerView listView;
 
+    //data
     String product_name, product_explain, nickname, image_name;
-    int product_price_hour, product_price_day, category;
+    int product_price_hour, product_price_day, category, uploader_account_key, user_account_key;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
+
+        SharedPreferences sf = getSharedPreferences("sFile",MODE_PRIVATE);
+        //text라는 key에 저장된 값이 있는지 확인. 아무값도 들어있지 않으면 ""를 반환
+        user_account_key = sf.getInt("key", -1);
 
         Intent intent = getIntent(); /*데이터 수신*/
 
@@ -49,6 +56,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         anothertitleList = new ArrayList();
         int itemkey = intent.getExtras().getInt("key");
         getItemInfoFromServer(itemkey);
+
 
 
 
@@ -134,6 +142,8 @@ public class ItemDetailActivity extends AppCompatActivity {
 
             Log.d("productdtail", r+"dfdafadfadfdafadfafaf"+result.length());
 
+
+            uploader_account_key = (int)((JSONObject)result.get(0)).get("account_key");
             category = (int)((JSONObject)result.get(0)).get("category_key");
             product_name = (String)((JSONObject)result.get(0)).get("product_name");
             product_price_hour = (int)((JSONObject)result.get(0)).get("product_price_hour");

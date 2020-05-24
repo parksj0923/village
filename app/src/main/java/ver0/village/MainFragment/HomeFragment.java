@@ -6,19 +6,20 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,7 +30,7 @@ import ver0.village.Item.ItemRecyclerViewAdapter;
 import ver0.village.R;
 import ver0.village.utils.NetworkTask;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
 
     Bitmap bmImg;
@@ -38,6 +39,7 @@ public class HomeFragment extends Fragment {
     TextView searchbox;
     RecyclerView recyclerView;
     ItemRecyclerViewAdapter itemAdapter = new ItemRecyclerViewAdapter();
+    SwipeRefreshLayout mSwipeRefreshLayout;
     ConstraintLayout category1, category2, category3, category4, category5, category6, category7, category8, category9, category10;
     TextView categoryAll, categoryStar, categorytitle_text;
     DrawerLayout drawerLayout;
@@ -104,7 +106,19 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // SwipeRefreshLayout
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_blue_dark);
 
+        /**
+         * Showing Swipe Refresh animation on activity create
+         * As animation won't start on onCreate, post runnable is used
+         */
+        mSwipeRefreshLayout.post(new Runnable() {
 
 
         ChangeCategory(itemAdapter, 10);
@@ -180,10 +194,12 @@ public class HomeFragment extends Fragment {
         }
 
 
+
     }
 
 
     private void ChangeCategory(ItemRecyclerViewAdapter itemAdapter, int category) {
+        mSwipeRefreshLayout.setRefreshing(true);
 
         itemAdapter.removeallitem();
 
@@ -218,6 +234,7 @@ public class HomeFragment extends Fragment {
         } catch(Exception e){
 
         }
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
 
@@ -350,4 +367,8 @@ public class HomeFragment extends Fragment {
     }
 
 
+    @Override
+    public void onRefresh() {
+        Log.d("refresh", "dd");
+    }
 }

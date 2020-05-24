@@ -1,7 +1,5 @@
 package ver0.village.Item;
 
-import android.graphics.drawable.Drawable;
-
 public class HomeItem {
     private boolean isHeart = false;
     private String item_name = "Sample";

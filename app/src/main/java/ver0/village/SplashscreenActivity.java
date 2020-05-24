@@ -5,16 +5,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ver0.village.utils.NetworkTask;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class SplashscreenActivity extends AppCompatActivity {
 
@@ -66,8 +69,8 @@ public class SplashscreenActivity extends AppCompatActivity {
 
 
 
+/*
 
-                    /*
                     Intent intent = new Intent(SplashscreenActivity.this,
                             TabActivity.class);//첫번째로 나올 화면
                     intent.putExtra("phone", phone);
