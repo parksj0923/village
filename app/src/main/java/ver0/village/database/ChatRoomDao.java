@@ -40,4 +40,7 @@ public interface ChatRoomDao {
 
     @Query("SELECT `key` FROM ChatRoom")
     List<String> getChatRoomKeys();
+
+    @Query("SELECT user_name FROM ChatRoom WHERE `key` LIKE :key")
+    String getUserName(String key);
 }

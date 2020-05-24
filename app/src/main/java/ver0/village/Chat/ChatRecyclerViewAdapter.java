@@ -81,7 +81,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
         final ChatItem item = itemList.get(position);
 
         Boolean isMine = TRUE;
-        String sender = item.getsender();
+        String sender = item.getSender();
         if(!sender.equals(id)){
             isMine = FALSE;
         }

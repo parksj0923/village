@@ -1,6 +1,7 @@
 package ver0.village;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DatabaseReference;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.internal.ListenerClass;
 import ver0.village.Chat.ChatListener;
 import ver0.village.Chat.RoomListener;
 import ver0.village.WritingUpload.WritingActivity;
@@ -41,6 +43,9 @@ public class TabActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
         tabLayout = findViewById(R.id.tab);
+
+        AddListener listenerTask = new AddListener();
+        listenerTask.execute();
 
         tabLayout.addTab(tabLayout.newTab().setCustomView(createTabView("홈", R.drawable.iconhome_click, false)));
         tabLayout.addTab(tabLayout.newTab().setCustomView(createTabView("거래 진행", R.drawable.icontrade, false)));
@@ -151,21 +156,6 @@ public class TabActivity extends AppCompatActivity {
                 }
             }
         });
-
-        ChatDatabase db = ChatDatabase.getAppDatabase(getApplicationContext());
-        List<String> chatRoomKeys = db.chatRoomDao().getChatRoomKeys();
-        OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(RoomListener.class)
-                .setInputData(createInputData("user_key")).build();
-        WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork(
-                "RoomListener",ExistingWorkPolicy.REPLACE, oneTimeWorkRequest);
-
-        for(int i = 0; i < chatRoomKeys.size(); i++){
-            String key = chatRoomKeys.get(i);
-            oneTimeWorkRequest = new OneTimeWorkRequest.Builder(ChatListener.class)
-                    .setInputData(createInputData(key)).build();
-            WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork(
-                    "Chat" + key + "Listener",ExistingWorkPolicy.REPLACE, oneTimeWorkRequest);
-        }
     }
 
 
@@ -193,4 +183,31 @@ public class TabActivity extends AppCompatActivity {
                 .build();
         return data;
     }
+
+    private class AddListener extends AsyncTask<Void, Void, Integer> {
+        @Override
+        protected Integer doInBackground(Void... params) {
+            ChatDatabase db = ChatDatabase.getAppDatabase(getApplicationContext());
+            List<String> chatRoomKeys = db.chatRoomDao().getChatRoomKeys();
+            OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(RoomListener.class)
+                    .setInputData(createInputData("user_key")).build();
+            WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork(
+                    "RoomListener",ExistingWorkPolicy.REPLACE, oneTimeWorkRequest);
+
+            for(int i = 0; i < chatRoomKeys.size(); i++){
+                String key = chatRoomKeys.get(i);
+                oneTimeWorkRequest = new OneTimeWorkRequest.Builder(ChatListener.class)
+                        .setInputData(createInputData(key)).build();
+                WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork(
+                        "Chat" + key + "Listener",ExistingWorkPolicy.REPLACE, oneTimeWorkRequest);
+            }
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+        }
+    }
+
+
 }

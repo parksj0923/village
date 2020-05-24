@@ -1,10 +1,13 @@
 package ver0.village.Chat;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -34,7 +37,8 @@ public class ChatListener extends Worker {
     @Override
     public Result doWork() {
         String roomKey = getInputData().getString("key");
-        ChatRoom chatRoom = db.chatRoomDao().getChatRoom("key");
+        ChatRoom chatRoom = db.chatRoomDao().getChatRoom(roomKey);
+        String userName = db.chatRoomDao().getUserName(roomKey);
         int roomId = chatRoom.getId();
         roomReference = databaseReference.child(roomKey);
         roomReference.addChildEventListener(new ChildEventListener() {
@@ -47,6 +51,14 @@ public class ChatListener extends Worker {
                         chatItem.getDatetime(), chatItem.getRead(), roomId);
                 db.chatDataDao().insert(chatData);
                 db.chatRoomDao().setActive(roomKey, true);
+//                NotificationCompat.Builder builder =
+//                        new NotificationCompat.Builder(getApplicationContext())
+//                        .setSmallIcon()
+//                        .setContentTitle()
+//                        .setContentText()
+//                        .setAutoCancel(true);
+//                NotificationManager notificationManager =
+//                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
             }
 
