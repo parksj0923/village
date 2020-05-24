@@ -91,15 +91,15 @@ public class IntroActivity extends AppCompatActivity {
         imageList.add(R.drawable.intro4);
     }
     public void onClick(View view) {
-//        Intent intent = new Intent(IntroActivity.this,
-//                LoginActivity.class);
-//        intent.putExtra("phone", phone);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//        startActivity(intent);
         Intent intent = new Intent(IntroActivity.this,
-                TabActivity.class);//첫번째로 나올 화면
+                LoginActivity.class);
+        intent.putExtra("phone", phone);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
+//        Intent intent = new Intent(IntroActivity.this,
+//                TabActivity.class);//첫번째로 나올 화면
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//        startActivity(intent);
         IntroActivity.this.finish();
     }
 
