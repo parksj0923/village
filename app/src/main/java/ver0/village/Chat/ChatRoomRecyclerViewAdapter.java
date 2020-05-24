@@ -10,10 +10,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.WorkManager;
 
 import java.util.ArrayList;
 
 import ver0.village.R;
+import ver0.village.database.ChatData;
+import ver0.village.database.ChatDatabase;
+import ver0.village.database.ChatRoom;
 
 public class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<ChatRoomRecyclerViewAdapter.ViewHolder> {
     private ArrayList<ChatRoomItem> itemList = new ArrayList<ChatRoomItem>();
@@ -45,11 +49,7 @@ public class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<ChatRoomRe
 
             img_user = view.findViewById(R.id.img_user);
             img_item = view.findViewById(R.id.img_item);
-
-
-
         }
-
 
         @Override
         public void onClick(View v){
@@ -58,7 +58,7 @@ public class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<ChatRoomRe
     }
 
     public ChatRoomRecyclerViewAdapter(ArrayList<ChatRoomItem> itemList){
-        this.itemList = (ArrayList<ChatRoomItem>) itemList.clone();
+        this.itemList = itemList;
     }
 
     @Override
@@ -78,8 +78,6 @@ public class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<ChatRoomRe
     public void onBindViewHolder(final ChatRoomRecyclerViewAdapter.ViewHolder holder, final int position){
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         final ChatRoomItem item = itemList.get(position);
-
-
 
         holder.text_itemname.setText(item.getItem_name());
         holder.text_username.setText(item.getUser_name());
@@ -105,14 +103,32 @@ public class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<ChatRoomRe
             public void onClick(View view) {
                 Intent intent = new Intent(context, ChatInsideActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtra("id", position);
                 context.startActivity(intent);
+                WorkManager.getInstance(context).cancelUniqueWork("ChatListener");
+            }
+        });
+        holder.totalView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ChatRoomItem chatRoomItem = itemList.get(position);
+                itemList.remove(position);
+                String key = chatRoomItem.getKey();
+                ChatDatabase db = ChatDatabase.getAppDatabase(context);
+                ChatRoom chatRoom = db.chatRoomDao().getChatRoom(key);
+                Integer roomId = chatRoom.getId();
+                db.chatDataDao().deleteRoomChat(roomId);
+                db.chatRoomDao().setActive(key, false);
+                notifyDataSetChanged();
+                return true;
             }
         });
     }
 
-    // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(String item_name, String user_name, String last_chat, int last_chattime, int alarmnum, Drawable img_item, Drawable img_user) {
-        ChatRoomItem item = new ChatRoomItem(item_name, user_name, last_chat,
+    public void addItem(String key, String item_name, String user_name, String last_chat, int last_chattime, int alarmnum, Drawable img_item, Drawable img_user) {
+        ChatRoomItem item = new ChatRoomItem(
+                key,
+                item_name, user_name, last_chat,
                 last_chattime, alarmnum, img_item, img_user);
         itemList.add(item);
     }

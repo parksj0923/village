@@ -1,68 +1,52 @@
 package ver0.village.Chat;
 
-import android.graphics.drawable.Drawable;
-
 public class ChatItem {
-    private String user_name;
-    private String item_name, last_chat;
-    private int last_chat_time, alarm_num;
-    private Drawable img_user, img_item;
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
+    private String sender;
+    private String message;
+    private Long datetime;
+    private Boolean read;
+
+    public ChatItem(){
+
     }
 
-    public void setItem_name(String item_name) {
-        this.item_name = item_name;
+    public ChatItem(String sender, String message, Long datetime) {
+        this.sender = sender;
+        this.message = message;
+        this.datetime = datetime;
+        this.read = false;
+    }
+    public ChatItem(String sender, String message, Long datetime, Boolean read) {
+        this.sender = sender;
+        this.message = message;
+        this.datetime = datetime;
+        this.read = read;
     }
 
-    public void setLast_chat(String last_chat) {
-        this.last_chat = last_chat;
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    public void setDatetime(Long datetime) {
+        this.datetime = datetime;
+    }
+    public void setRead(Boolean read) {
+        this.read = read;
     }
 
-    public void setAlarm_num(int alarm_num) {
-        this.alarm_num = alarm_num;
+    public String getSender() {
+        return this.sender;
     }
-
-    public void setImg_user(Drawable img_user) {
-        this.img_user = img_user;
+    public String getMessage() {
+        return this.message;
     }
-
-    public void setImg_item(Drawable img_item) {
-        this.img_item = img_item;
+    public Long getDatetime(){
+        return this.datetime;
     }
-
-    public void setLast_chat_time(int last_chat_time) {
-        this.last_chat_time = last_chat_time;
+    public Boolean getRead(){
+        return this.read;
     }
-
-    public Drawable getImg_item() {
-        return img_item;
-    }
-
-    public Drawable getImg_user() {
-        return img_user;
-    }
-
-    public int getAlarm_num() {
-        return alarm_num;
-    }
-
-    public int getLast_chat_time() {
-        return last_chat_time;
-    }
-
-    public String getItem_name() {
-        return item_name;
-    }
-
-    public String getLast_chat() {
-        return last_chat;
-    }
-
-    public String getUser_name() {
-        return user_name;
-    }
-
-
 }

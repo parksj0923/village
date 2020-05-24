@@ -598,8 +598,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
                 LoginActivity.this.finish();
             }
-
-
         }
     }
 

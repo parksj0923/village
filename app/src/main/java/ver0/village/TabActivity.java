@@ -3,8 +3,16 @@ package ver0.village;
 import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.Data;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.Worker;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +20,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import java.util.List;
+
+import ver0.village.Chat.ChatListener;
+import ver0.village.Chat.RoomListener;
 import ver0.village.WritingUpload.WritingActivity;
+import ver0.village.database.ChatDatabase;
 import ver0.village.utils.CustomViewPager;
 import ver0.village.utils.TabPagerAdapter;
 
@@ -27,8 +40,6 @@ public class TabActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
-
-
         tabLayout = findViewById(R.id.tab);
 
         tabLayout.addTab(tabLayout.newTab().setCustomView(createTabView("홈", R.drawable.iconhome_click, false)));
@@ -140,6 +151,21 @@ public class TabActivity extends AppCompatActivity {
                 }
             }
         });
+
+        ChatDatabase db = ChatDatabase.getAppDatabase(getApplicationContext());
+        List<String> chatRoomKeys = db.chatRoomDao().getChatRoomKeys();
+        OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(RoomListener.class)
+                .setInputData(createInputData("user_key")).build();
+        WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork(
+                "RoomListener",ExistingWorkPolicy.REPLACE, oneTimeWorkRequest);
+
+        for(int i = 0; i < chatRoomKeys.size(); i++){
+            String key = chatRoomKeys.get(i);
+            oneTimeWorkRequest = new OneTimeWorkRequest.Builder(ChatListener.class)
+                    .setInputData(createInputData(key)).build();
+            WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork(
+                    "Chat" + key + "Listener",ExistingWorkPolicy.REPLACE, oneTimeWorkRequest);
+        }
     }
 
 
@@ -161,5 +187,10 @@ public class TabActivity extends AppCompatActivity {
         return tabView;
     }
 
-
+    private Data createInputData(String key){
+        Data data = new Data.Builder()
+                .putString("key", key)
+                .build();
+        return data;
+    }
 }

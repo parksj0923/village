@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <service android:name=".Chat.ChildEventListener"/>
         <activity android:name=".Mypage.ChangeProfileActivity"></activity>
         <activity android:name=".Trade.LendStatus5Activity" />
         <activity android:name=".Trade.LendStatus4Activity" />

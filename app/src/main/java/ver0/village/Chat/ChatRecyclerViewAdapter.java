@@ -18,17 +18,17 @@ import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
 public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerViewAdapter.ViewHolder> {
-    private ArrayList<ChatData> itemList = new ArrayList<ChatData>();
+    private ArrayList<ChatItem> itemList = new ArrayList<ChatItem>();
     private Bitmap profileImage;
     private String id;
 
-    public ChatRecyclerViewAdapter(ArrayList<ChatData> chatDataArrayList, String id){
-        this.itemList = chatDataArrayList;
+    public ChatRecyclerViewAdapter(ArrayList<ChatItem> chatItemArrayList, String id){
+        this.itemList = chatItemArrayList;
         this.id = id;
     }
 
-    public ChatRecyclerViewAdapter(ArrayList<ChatData> chatDataArrayList, Bitmap profileImage){
-        this.itemList = chatDataArrayList;
+    public ChatRecyclerViewAdapter(ArrayList<ChatItem> chatItemArrayList, Bitmap profileImage){
+        this.itemList = chatItemArrayList;
         this.profileImage = profileImage;
     }
 
@@ -78,7 +78,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
     @Override
     public void onBindViewHolder(final ChatRecyclerViewAdapter.ViewHolder holder, final int position){
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
-        final ChatData item = itemList.get(position);
+        final ChatItem item = itemList.get(position);
 
         Boolean isMine = TRUE;
         String sender = item.getsender();
@@ -105,8 +105,8 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
         });
     }
 
-    public void addChatItem(String sender, String message, String datetime) {
-        ChatData item = new ChatData();
+    public void addChatItem(String sender, String message, Long datetime) {
+        ChatItem item = new ChatItem();
         item.setSender(sender);
         item.setMessage(message);
         item.setDatetime(datetime);

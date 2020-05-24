@@ -1,9 +1,9 @@
 package ver0.village.Chat;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import ver0.village.R;
 
@@ -38,20 +39,35 @@ public class ChatInsideActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TextView toolbar_title;
     private RecyclerView recyclerView;
-    private String id = "123";
+    private String my_key, user_key, item_key;
     private EditText editText;
     private Button send_button, more_option_button;
-    private ArrayList<ChatData> chatList = new ArrayList<ChatData>();
+    private ArrayList<ChatItem> chatItemList = new ArrayList<ChatItem>();
     static final String[] OPTIONS = {"신고하기", "차단하기", "채팅방 알림 해제하기", "채팅방 나가기"};
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = database.getReference("chat");
-    private ChatRecyclerViewAdapter chatRecyclerViewAdapter = new ChatRecyclerViewAdapter(chatList, id);
+    private ChatRecyclerViewAdapter chatRecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatinside);
+
+        Intent intent = getIntent();
+        Integer id = intent.getIntExtra("id", 0);
+        Integer user_id;
+        my_key = "test_id_" + id;
+        if (id == 0){
+            user_id = 1;
+        } else {
+            user_id = 0;
+        }
+
+        String chatRoomKey = "test_id_0_test_id_1_item_key";
+        DatabaseReference roomReference = databaseReference.child(chatRoomKey);
+        chatRecyclerViewAdapter = new ChatRecyclerViewAdapter(chatItemList, my_key);
+
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar_title = (TextView)findViewById(R.id.toolbar_title);
@@ -80,7 +96,7 @@ public class ChatInsideActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String message = editText.getText().toString();
                 if(!message.equals("")) {
-                    databaseReference.push().setValue(new ChatData(id, message, ""));
+                    roomReference.push().setValue(new ChatItem(my_key, message, Calendar.getInstance().getTime().getTime()));
                     editText.setText("");
                 }
             }
@@ -94,13 +110,15 @@ public class ChatInsideActivity extends AppCompatActivity {
             }
         });
 
-        databaseReference.addChildEventListener(new ChildEventListener() {
+        roomReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.e("db ","check");
-                ChatData chatData = dataSnapshot.getValue(ChatData.class);
-                chatList.add(chatData);
+                String key = dataSnapshot.getKey();
+                ChatItem chatItem = dataSnapshot.getValue(ChatItem.class);
+                chatItemList.add(chatItem);
                 chatRecyclerViewAdapter.notifyDataSetChanged();
+                dataSnapshot.getRef().removeValue();
+
             }
 
             @Override
@@ -129,16 +147,8 @@ public class ChatInsideActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
         overridePendingTransition(0,0);
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater menuInflater = getMenuInflater();
-//        menuInflater.inflate(R.menu.menu_chat_inside, menu);
-//        return true;
-//    }
 
     private void showAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(ChatInsideActivity.this);
@@ -153,13 +163,11 @@ public class ChatInsideActivity extends AppCompatActivity {
 
         listview.setAdapter(arrayAdapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
             }
         });
-
         dialog.setCancelable(true);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
