@@ -2,22 +2,32 @@ package ver0.village.Chat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.WorkManager;
 
+import com.google.android.material.snackbar.Snackbar;
+
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import ver0.village.R;
 import ver0.village.database.ChatData;
 import ver0.village.database.ChatDatabase;
 import ver0.village.database.ChatRoom;
+
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<ChatRoomRecyclerViewAdapter.ViewHolder> {
     private ArrayList<ChatRoomItem> itemList = new ArrayList<ChatRoomItem>();
@@ -102,24 +112,61 @@ public class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<ChatRoomRe
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ChatInsideActivity.class);
+                Drawable userDraw = itemList.get(position).getImg_user();
+                Drawable itmeDraw = itemList.get(position).getImg_item();
+                Bitmap bitmap = ((BitmapDrawable)userDraw).getBitmap();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] userImg = stream.toByteArray();
+                bitmap = ((BitmapDrawable)itmeDraw).getBitmap();
+                stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] itemImg = stream.toByteArray();
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtra("userImg", userImg);
+                intent.putExtra("itemImg", itemImg);
                 intent.putExtra("id", position);
-                context.startActivity(intent);
                 WorkManager.getInstance(context).cancelUniqueWork("ChatListener");
+                context.startActivity(intent);
             }
         });
         holder.totalView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                ChatRoomItem chatRoomItem = itemList.get(position);
-                itemList.remove(position);
-                String key = chatRoomItem.getKey();
-                ChatDatabase db = ChatDatabase.getAppDatabase(context);
-                ChatRoom chatRoom = db.chatRoomDao().getChatRoom(key);
-                Integer roomId = chatRoom.getId();
-                db.chatDataDao().deleteRoomChat(roomId);
-                db.chatRoomDao().setActive(key, false);
-                notifyDataSetChanged();
+                LinearLayout.LayoutParams objLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                Snackbar snackbar = Snackbar.make(holder.totalView, "", Snackbar.LENGTH_INDEFINITE);
+                Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
+                layout.setPadding(0,0,0,0);
+                TextView textView = (TextView) layout.findViewById(com.google.android.material.R.id.snackbar_text);
+                textView.setVisibility(View.INVISIBLE);
+
+                LayoutInflater mInflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+                View snackView = mInflater.inflate(R.layout.chat_snackbar, null);
+                TextView leaveText = (TextView) snackView.findViewById(R.id.leave_text);
+                TextView cancelText = (TextView) snackView.findViewById(R.id.cancel_text);
+                leaveText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ChatRoomItem chatRoomItem = itemList.get(position);
+                        itemList.remove(position);
+                        String key = chatRoomItem.getKey();
+                        ChatDatabase db = ChatDatabase.getAppDatabase(context);
+                        ChatRoom chatRoom = db.chatRoomDao().getChatRoom(key);
+                        Integer roomId = chatRoom.getId();
+                        db.chatDataDao().deleteRoomChat(roomId);
+                        db.chatRoomDao().setActive(key, false);
+                        notifyDataSetChanged();
+                        snackbar.dismiss();
+                    }
+                });
+                cancelText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackbar.dismiss();
+                    }
+                });
+                layout.addView(snackView, objLayoutParams);
+                snackbar.show();
                 return true;
             }
         });
@@ -138,5 +185,10 @@ public class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<ChatRoomRe
         ChatRoomRecyclerViewAdapter.clickListener = clickListener;
     }
 
+    private void myCustomSnackbar()
+    {
+        // Create the Snackbar
+
+    }
 
 }

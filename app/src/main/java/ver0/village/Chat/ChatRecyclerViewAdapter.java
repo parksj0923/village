@@ -27,6 +27,12 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
         this.id = id;
     }
 
+    public ChatRecyclerViewAdapter(ArrayList<ChatItem> chatItemArrayList, String id, Bitmap profileImage){
+        this.itemList = chatItemArrayList;
+        this.id = id;
+        this.profileImage = profileImage;
+    }
+
     public ChatRecyclerViewAdapter(ArrayList<ChatItem> chatItemArrayList, Bitmap profileImage){
         this.itemList = chatItemArrayList;
         this.profileImage = profileImage;

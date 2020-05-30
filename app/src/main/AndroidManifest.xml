@@ -16,7 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <service android:name=".Chat.ChildEventListener"/>
         <activity android:name=".Mypage.ChangeProfileActivity"></activity>
         <activity android:name=".Trade.LendStatus5Activity" />
         <activity android:name=".Trade.LendStatus4Activity" />
@@ -38,7 +37,9 @@
         <activity android:name=".Mypage.ContactVillageActivity" />
         <activity android:name=".WritingUpload.WritingActivity" />
         <activity android:name=".MainFragment.HomeFragmentSearchActivity" />
-        <activity android:name=".Chat.ChatInsideActivity" />
+        <activity
+            android:name=".Chat.ChatInsideActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".Item.ItemDetailActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".IntroActivity" />

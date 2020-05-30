@@ -1,17 +1,22 @@
 package ver0.village.Chat;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,7 +46,9 @@ public class ChatInsideActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private String my_key, user_key, item_key;
     private EditText editText;
+    private ScrollView scrollView;
     private Button send_button, more_option_button;
+    private ImageView product_img;
     private ArrayList<ChatItem> chatItemList = new ArrayList<ChatItem>();
     static final String[] OPTIONS = {"신고하기", "차단하기", "채팅방 알림 해제하기", "채팅방 나가기"};
 
@@ -53,9 +60,12 @@ public class ChatInsideActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatinside);
-
         Intent intent = getIntent();
         Integer id = intent.getIntExtra("id", 0);
+        byte[] byteUserImg = intent.getByteArrayExtra("userImg");
+        byte[] byteItemImg = intent.getByteArrayExtra("itemImg");
+        Bitmap userImg = BitmapFactory.decodeByteArray(byteUserImg, 0, byteUserImg.length);
+        Bitmap itemImg = BitmapFactory.decodeByteArray(byteItemImg, 0, byteItemImg.length);
         Integer user_id;
         my_key = "test_id_" + id;
         if (id == 0){
@@ -66,8 +76,7 @@ public class ChatInsideActivity extends AppCompatActivity {
 
         String chatRoomKey = "test_id_0_test_id_1_item_key";
         DatabaseReference roomReference = databaseReference.child(chatRoomKey);
-        chatRecyclerViewAdapter = new ChatRecyclerViewAdapter(chatItemList, my_key);
-
+        chatRecyclerViewAdapter = new ChatRecyclerViewAdapter(chatItemList, my_key, userImg);
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar_title = (TextView)findViewById(R.id.toolbar_title);
@@ -75,10 +84,12 @@ public class ChatInsideActivity extends AppCompatActivity {
         editText = (EditText)findViewById(R.id.edit_text_chat);
         send_button = (Button)findViewById(R.id.button_chat);
         more_option_button = (Button)findViewById(R.id.more_option_button);
-
+        product_img = (ImageView)findViewById(R.id.image_product);
+        scrollView = (ScrollView)findViewById(R.id.recycle_layout);
 
         setSupportActionBar(toolbar);
         toolbar_title.setText("박성주");
+        product_img.setImageBitmap(itemImg);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
@@ -90,13 +101,14 @@ public class ChatInsideActivity extends AppCompatActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(chatRecyclerViewAdapter);
+        scrollView.setEnabled(false);
 
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String message = editText.getText().toString();
                 if(!message.equals("")) {
-                    roomReference.push().setValue(new ChatItem(my_key, message, Calendar.getInstance().getTime().getTime()));
+                    roomReference.push().setValue(new ChatItem(my_key, message, Calendar.getInstance().getTime().getTime(), true));
                     editText.setText("");
                 }
             }
@@ -117,13 +129,12 @@ public class ChatInsideActivity extends AppCompatActivity {
                 ChatItem chatItem = dataSnapshot.getValue(ChatItem.class);
                 chatItemList.add(chatItem);
                 chatRecyclerViewAdapter.notifyDataSetChanged();
-                dataSnapshot.getRef().removeValue();
+//                dataSnapshot.getRef().removeValue();
 
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
 
             @Override
