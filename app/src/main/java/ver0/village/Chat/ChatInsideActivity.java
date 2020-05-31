@@ -1,5 +1,7 @@
 package ver0.village.Chat;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,8 +27,15 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -56,6 +65,8 @@ public class ChatInsideActivity extends AppCompatActivity {
     DatabaseReference databaseReference = database.getReference("chat");
     private ChatRecyclerViewAdapter chatRecyclerViewAdapter;
 
+    private String chatRoomKey;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +85,7 @@ public class ChatInsideActivity extends AppCompatActivity {
             user_id = 0;
         }
 
-        String chatRoomKey = "test_id_0_test_id_1_item_key";
+        chatRoomKey = "test_id_0_test_id_1_item_key";
         DatabaseReference roomReference = databaseReference.child(chatRoomKey);
         chatRecyclerViewAdapter = new ChatRecyclerViewAdapter(chatItemList, my_key, userImg);
 
@@ -130,6 +141,15 @@ public class ChatInsideActivity extends AppCompatActivity {
                 chatItemList.add(chatItem);
                 chatRecyclerViewAdapter.notifyDataSetChanged();
 //                dataSnapshot.getRef().removeValue();
+                NotificationCompat.Builder builder =
+                        new NotificationCompat.Builder(getApplicationContext())
+                                .setSmallIcon(R.drawable.sample_userimg)
+                                .setContentTitle("test")
+                                .setContentText("test")
+                                .setAutoCancel(true);
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(1, builder.build());
 
             }
 
@@ -159,6 +179,19 @@ public class ChatInsideActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         overridePendingTransition(0,0);
+    }
+
+    @Override protected void onStop() {
+        super.onStop();
+        Constraints.Builder constraintsBuilder = new Constraints.Builder();
+        constraintsBuilder.setRequiredNetworkType(NetworkType.CONNECTED);
+        Constraints constraints = constraintsBuilder.build();
+
+        OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(ChatListener.class)
+                .setInputData(createInputData("test_id_0_test_id_1_item_key"))
+                .setConstraints(constraints).build();
+        WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork(
+                "ChatListener", ExistingWorkPolicy.REPLACE, oneTimeWorkRequest);
     }
 
     private void showAlertDialog() {
@@ -194,4 +227,12 @@ public class ChatInsideActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private Data createInputData(String key){
+        Data data = new Data.Builder()
+                .putString("key", key)
+                .build();
+        return data;
+    }
+
 }
