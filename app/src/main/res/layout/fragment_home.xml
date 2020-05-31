@@ -83,10 +83,11 @@
             app:layout_constraintTop_toTopOf="@id/searchbox"
             app:layout_constraintEnd_toEndOf="@id/searchbox" />
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/swipe_container"
+            app:srl_direction="bottom"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/searchbox">
             <androidx.recyclerview.widget.RecyclerView
@@ -97,7 +98,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/searchbox"
                 ></androidx.recyclerview.widget.RecyclerView>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
