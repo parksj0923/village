@@ -6,11 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,6 +16,10 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.model.Image;
@@ -98,20 +98,24 @@ public class WritingActivity extends AppCompatActivity {
     }
 
     public void close(View view) {
-        AlertDialog.Builder popup = new AlertDialog.Builder(WritingActivity.this);
-        popup.setMessage("나가시면 저장되지 않습니다. 정말 나가시겠습니까?");
-        popup.setPositiveButton("돌아가기", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        });
-        popup.setNegativeButton("나가기", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        });
-        popup.show();
+        if(a||b||c||d||e) {
+            AlertDialog.Builder popup = new AlertDialog.Builder(WritingActivity.this);
+            popup.setMessage("나가시면 저장되지 않습니다. 정말 나가시겠습니까?");
+            popup.setPositiveButton("돌아가기", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+            popup.setNegativeButton("나가기", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            popup.show();
+        } else{
+            finish();
+        }
     }
 
 
@@ -124,7 +128,7 @@ public class WritingActivity extends AppCompatActivity {
 
         init();
         editTextFunction();
-        bottombtn_enabledornot(0, true);
+
     }
 
     public void imagePicker(View view) {
@@ -186,6 +190,7 @@ public class WritingActivity extends AppCompatActivity {
             listView.setAdapter(adapter);
 
             picure_num.setText("("+images.size()+"/5)");
+            bottombtn_enabledornot(0, true);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -605,20 +610,24 @@ public class WritingActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(state == State.MAIN){
-            AlertDialog.Builder popup = new AlertDialog.Builder(WritingActivity.this);
-            popup.setMessage("나가시면 저장되지 않습니다. 정말 나가시겠습니까?");
-            popup.setPositiveButton("돌아가기", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                }
-            });
-            popup.setNegativeButton("나가기", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    finish();
-                }
-            });
-            popup.show();
+            if(a||b||c||d||e) {
+                AlertDialog.Builder popup = new AlertDialog.Builder(WritingActivity.this);
+                popup.setMessage("나가시면 저장되지 않습니다. 정말 나가시겠습니까?");
+                popup.setPositiveButton("돌아가기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                popup.setNegativeButton("나가기", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                });
+                popup.show();
+            } else{
+                finish();
+            }
         } else if(state == State.CATEGORY){
             categorylayout.setVisibility(View.GONE);
             mainlayout.setVisibility(View.VISIBLE);
