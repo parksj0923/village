@@ -94,7 +94,7 @@ public class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<ChatRoomRe
         holder.text_lastchat.setText(item.getLast_chat());
         holder.text_alarmnum.setText(""+item.getAlarm_num());
 
-        int time = item.getLast_chat_time();
+        long time = item.getLast_chat_time();
         if(time < 60){
             holder.text_lastchat_time.setText(""+time+"분 전");
         } else if(time >= 60 && time < 1440){
@@ -113,12 +113,12 @@ public class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<ChatRoomRe
             public void onClick(View view) {
                 Intent intent = new Intent(context, ChatInsideActivity.class);
                 Drawable userDraw = itemList.get(position).getImg_user();
-                Drawable itmeDraw = itemList.get(position).getImg_item();
+                Drawable itemDraw = itemList.get(position).getImg_item();
                 Bitmap bitmap = ((BitmapDrawable)userDraw).getBitmap();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 byte[] userImg = stream.toByteArray();
-                bitmap = ((BitmapDrawable)itmeDraw).getBitmap();
+                bitmap = ((BitmapDrawable)itemDraw).getBitmap();
                 stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 byte[] itemImg = stream.toByteArray();

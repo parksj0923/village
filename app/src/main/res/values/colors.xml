@@ -22,4 +22,10 @@
     <color name="colorUnselect">#B0B0B0</color>
 
     <color name="colorChatTitle">#3B4861</color>
+    <color name="colorChatRead">#909FBB</color>
+    <color name="colorChatFirstBack">#3C62E5</color>
+    <color name="colorChatMyBack">#0AA864</color>
+    <color name="colorChatMyText">#EEFAF5</color>
+    <color name="colorChatOpBack">#F0F2F6</color>
+    <color name="colorChatOpText">#3B4861</color>
 </resources>

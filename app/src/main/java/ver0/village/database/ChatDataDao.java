@@ -30,7 +30,7 @@ public interface ChatDataDao {
     List<ChatData> getRoomChat(int room_id);
 
     @Query("SELECT * FROM ChatData WHERE room_id=:room_id ORDER BY datetime DESC LIMIT 1")
-    List<ChatData> getLatestChat(int room_id);
+    ChatData getLatestChat(int room_id);
 
     @Query("DELETE FROM ChatData WHERE room_id=:room_id")
     void deleteRoomChat(int room_id);
