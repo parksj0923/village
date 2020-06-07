@@ -5,7 +5,8 @@ import android.graphics.drawable.Drawable;
 public class ChatRoomItem {
     private String key;
     private String user_name, item_name, last_chat;
-    private int last_chat_time, alarm_num;
+    private int alarm_num;
+    private long last_chat_time;
     private Drawable img_user, img_item;
 
     public void setKey(String key) {
@@ -45,7 +46,7 @@ public class ChatRoomItem {
     public int getAlarm_num() {
         return alarm_num;
     }
-    public int getLast_chat_time() {
+    public long getLast_chat_time() {
         return last_chat_time;
     }
     public String getItem_name() {
@@ -58,10 +59,14 @@ public class ChatRoomItem {
         return user_name;
     }
 
+    public ChatRoomItem(){
+
+    }
+
     public ChatRoomItem(
             String key,
             String item_name, String user_name, String last_chat,
-            int last_chattime, int alarmnum, Drawable img_item, Drawable img_user){
+            long last_chattime, int alarmnum, Drawable img_item, Drawable img_user){
         this.key = key;
         this.item_name = item_name;
         this.user_name = user_name;

@@ -1,10 +1,14 @@
 package ver0.village.Chat;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -21,16 +25,19 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
     private ArrayList<ChatItem> itemList = new ArrayList<ChatItem>();
     private Bitmap profileImage;
     private String id;
-
+    private Context context;
+    private Drawable firstBack;
     public ChatRecyclerViewAdapter(ArrayList<ChatItem> chatItemArrayList, String id){
         this.itemList = chatItemArrayList;
         this.id = id;
     }
 
-    public ChatRecyclerViewAdapter(ArrayList<ChatItem> chatItemArrayList, String id, Bitmap profileImage){
+    public ChatRecyclerViewAdapter(Context context, ArrayList<ChatItem> chatItemArrayList, String id, Bitmap profileImage){
         this.itemList = chatItemArrayList;
         this.id = id;
         this.profileImage = profileImage;
+        this.context = context;
+        firstBack = context.getDrawable(R.drawable.first_chat);
     }
 
     public ChatRecyclerViewAdapter(ArrayList<ChatItem> chatItemArrayList, Bitmap profileImage){
@@ -40,7 +47,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         View totalView;;
-        ConstraintLayout my_layout, op_layout;
+        LinearLayout my_layout, op_layout;
         TextView text_my_chat, text_op_chat, text_my_datetime, text_op_datetime, text_my_read;
         ImageView profile_image;
 
@@ -94,14 +101,17 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<ChatRecyclerVi
 
         if(isMine){
             holder.op_layout.setVisibility(View.GONE);
-//            if(item.getRead()) holder.text_my_read.setText("읽음");
-//            holder.text_my_datetime.setText(item.getDatetime());
+            if(item.getRead()) holder.text_my_read.setText("읽음");
+            holder.text_my_datetime.setText("오전 11:58");
             holder.text_my_chat.setText(item.getMessage());
+            if (position == 0){
+                holder.text_my_chat.setBackground(firstBack);
+            }
         } else{
             holder.my_layout.setVisibility(View.GONE);
-//            holder.profile_image.setImageBitmap(profileImage);
+            holder.profile_image.setImageBitmap(profileImage);
             holder.text_op_chat.setText(item.getMessage());
-//            holder.text_op_datetime.setText(item.getDatetime());
+            holder.text_op_datetime.setText("오전 11:58");
         }
 
         holder.totalView.setOnClickListener(new View.OnClickListener() {

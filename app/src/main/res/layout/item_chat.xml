@@ -4,81 +4,83 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="5dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/layout_op_chat"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_gravity="left"
+        app:layout_constraintLeft_toLeftOf="parent">
 
         <ImageView
+            android:layout_gravity="left|start"
             android:id="@+id/image_op_profile"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/text_op_message"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:layout_height="wrap_content" />
 
         <TextView
+            android:layout_gravity="left|start"
             android:id="@+id/text_op_message"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toRightOf="@id/image_op_profile"
-            app:layout_constraintRight_toLeftOf="@id/text_op_datetime"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:padding="10dp"
+            android:textSize="14dp"
+            android:textColor="@color/colorChatOpText"
+            android:background="@drawable/op_message"
+            android:paddingLeft="5dp"/>
 
         <TextView
+            android:layout_gravity="left|bottom"
             android:id="@+id/text_op_datetime"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toRightOf="@id/text_op_message"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:textSize="10dp"
+            android:textColor="@color/colorChatRead"
+            android:paddingLeft="2dp"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/layout_my_chat"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_gravity="right"
+        android:gravity="right"
+        app:layout_constraintRight_toRightOf="parent">
 
         <TextView
+            android:layout_gravity="right|bottom"
             android:id="@+id/text_my_read"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/text_my_datetime"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:textSize="10dp"
+            android:textColor="@color/colorChatTitle"
+            android:paddingRight="2dp"/>
 
         <TextView
+            android:layout_gravity="right|bottom"
             android:id="@+id/text_my_datetime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toRightOf="@id/text_my_read"
-            app:layout_constraintRight_toLeftOf="@id/text_my_datetime"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:textSize="10dp"
+            android:textColor="@color/colorChatRead"
+            android:paddingRight="5dp"/>
 
         <TextView
+            android:layout_gravity="right|end"
             android:id="@+id/text_my_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toRightOf="@id/text_my_datetime"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:padding="10dp"
+            android:textSize="14dp"
+            android:textColor="@color/colorChatMyText"
+            android:background="@drawable/my_message" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 
 

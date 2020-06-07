@@ -8,6 +8,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,7 +57,6 @@ public class ChatInsideActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private String my_key, user_key, item_key;
     private EditText editText;
-    private ScrollView scrollView;
     private Button send_button, more_option_button;
     private ImageView product_img;
     private ArrayList<ChatItem> chatItemList = new ArrayList<ChatItem>();
@@ -63,6 +64,8 @@ public class ChatInsideActivity extends AppCompatActivity {
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = database.getReference("chat");
+    DatabaseReference roomReference;
+    private ChildEventListener chatEventListener;
     private ChatRecyclerViewAdapter chatRecyclerViewAdapter;
 
     private String chatRoomKey;
@@ -86,8 +89,8 @@ public class ChatInsideActivity extends AppCompatActivity {
         }
 
         chatRoomKey = "test_id_0_test_id_1_item_key";
-        DatabaseReference roomReference = databaseReference.child(chatRoomKey);
-        chatRecyclerViewAdapter = new ChatRecyclerViewAdapter(chatItemList, my_key, userImg);
+        roomReference = databaseReference.child(chatRoomKey);
+        chatRecyclerViewAdapter = new ChatRecyclerViewAdapter(this, chatItemList, my_key, userImg);
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar_title = (TextView)findViewById(R.id.toolbar_title);
@@ -96,7 +99,6 @@ public class ChatInsideActivity extends AppCompatActivity {
         send_button = (Button)findViewById(R.id.button_chat);
         more_option_button = (Button)findViewById(R.id.more_option_button);
         product_img = (ImageView)findViewById(R.id.image_product);
-        scrollView = (ScrollView)findViewById(R.id.recycle_layout);
 
         setSupportActionBar(toolbar);
         toolbar_title.setText("박성주");
@@ -112,14 +114,13 @@ public class ChatInsideActivity extends AppCompatActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(chatRecyclerViewAdapter);
-        scrollView.setEnabled(false);
 
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String message = editText.getText().toString();
                 if(!message.equals("")) {
-                    roomReference.push().setValue(new ChatItem(my_key, message, Calendar.getInstance().getTime().getTime(), true));
+                    roomReference.push().setValue(new ChatItem(my_key, message, Calendar.getInstance().getTime().getTime()));
                     editText.setText("");
                 }
             }
@@ -133,23 +134,20 @@ public class ChatInsideActivity extends AppCompatActivity {
             }
         });
 
-        roomReference.addChildEventListener(new ChildEventListener() {
+        chatEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String key = dataSnapshot.getKey();
                 ChatItem chatItem = dataSnapshot.getValue(ChatItem.class);
                 chatItemList.add(chatItem);
+                String sender = chatItem.getSender();
                 chatRecyclerViewAdapter.notifyDataSetChanged();
+                if (!my_key.equals(sender)){
+                    chatItem.setRead(true);
+                    dataSnapshot.getRef().setValue(chatItem);
+                }
 //                dataSnapshot.getRef().removeValue();
-                NotificationCompat.Builder builder =
-                        new NotificationCompat.Builder(getApplicationContext())
-                                .setSmallIcon(R.drawable.sample_userimg)
-                                .setContentTitle("test")
-                                .setContentText("test")
-                                .setAutoCancel(true);
-                NotificationManager notificationManager =
-                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.notify(1, builder.build());
+
 
             }
 
@@ -171,7 +169,9 @@ public class ChatInsideActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        };
+
+        roomReference.addChildEventListener(chatEventListener);
 
     }
 
@@ -192,6 +192,13 @@ public class ChatInsideActivity extends AppCompatActivity {
                 .setConstraints(constraints).build();
         WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork(
                 "ChatListener", ExistingWorkPolicy.REPLACE, oneTimeWorkRequest);
+        roomReference.removeEventListener(chatEventListener);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        roomReference.addChildEventListener(chatEventListener);
     }
 
     private void showAlertDialog() {

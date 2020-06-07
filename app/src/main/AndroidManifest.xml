@@ -41,7 +41,7 @@
         <activity android:name=".MainFragment.HomeFragmentSearchActivity" />
         <activity
             android:name=".Chat.ChatInsideActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".Item.ItemDetailActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".IntroActivity" />
