@@ -7,15 +7,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
@@ -25,6 +20,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.karumi.dexter.Dexter;
@@ -40,10 +42,20 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import ver0.village.utils.NetworkTask;
 import ver0.village.utils.Universe;
 import ver0.village.utils.UniversityListAdapter;
 import ver0.village.utils.UserInfo;
+
+;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -51,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
     UserInfo userInfo;
     int certificationnum;
     String profileimg_incodedbitmap;
+    Bitmap profileimg_bitmap;
 
     //main
     boolean bottombuttonEnabled = false;
@@ -475,9 +488,9 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     // You can update this bitmap to your server
                     Log.d("uri-------->", uri.toString());
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                    profileimg_bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                    profileimg_bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
                     byte[] b = baos.toByteArray();
                     profileimg_incodedbitmap= Base64.encodeToString(b, Base64.DEFAULT);
 
@@ -557,6 +570,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d("--register--", "-------start-------------");
                 userInfo.logprtint();
                 try {
+                    uploadImage();
 
                     JSONObject paramMap = new JSONObject();
                     paramMap.put("phone", userInfo.getPhoneNumber());
@@ -565,6 +579,7 @@ public class LoginActivity extends AppCompatActivity {
                     paramMap.put("universitykey", userInfo.getUniversityInfo().getUniverseKey());
                     paramMap.put("nickname", userInfo.getUserNickname());
                     paramMap.put("email", userInfo.getUserEmail());
+                    paramMap.put("profile", userInfo.getPhoneNumber()+".jpg");
 
                     NetworkTask networkTask = new NetworkTask("account/register", "POST", paramMap);
                     networkTask.execute();
@@ -598,9 +613,69 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
                 LoginActivity.this.finish();
             }
+
+
         }
     }
 
+    private void uploadImage(){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        profileimg_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        RequestBody postBodyImage = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("image", userInfo.getPhoneNumber()+".jpg", RequestBody.create(MediaType.parse("image/*jpg"), byteArray))
+                .build();
+
+        postRequest("http://52.78.244.194/account/uploadimage", postBodyImage);
+    }
+
+    private void postRequest(String postUrl, RequestBody postBody) {
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(postUrl)
+                .post(postBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Cancel the post on failure.
+                call.cancel();
+
+                // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        /*
+                        TextView responseText = findViewById(R.id.responseText);
+                        responseText.setText("Failed to Connect to Server");
+                         */
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                // In order to access the TextView inside the UI thread, the code is executed inside runOnUiThread()
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        /*
+                        TextView responseText = findViewById(R.id.responseText);
+                        try {
+                            responseText.setText(response.body().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }*/
+                    }
+                });
+            }
+        });
+    }
 
 
 
