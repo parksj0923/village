@@ -3,6 +3,7 @@ package ver0.village.Chat;
 import android.graphics.drawable.Drawable;
 
 public class ChatRoomItem {
+    private Integer id;
     private String key;
     private String user_name, item_name, last_chat;
     private int alarm_num;
@@ -34,6 +35,7 @@ public class ChatRoomItem {
         this.last_chat_time = last_chat_time;
     }
 
+    public Integer getId() { return id;}
     public String getKey() {
         return key;
     }
@@ -64,9 +66,10 @@ public class ChatRoomItem {
     }
 
     public ChatRoomItem(
-            String key,
+            Integer id, String key,
             String item_name, String user_name, String last_chat,
             long last_chattime, int alarmnum, Drawable img_item, Drawable img_user){
+        this.id = id;
         this.key = key;
         this.item_name = item_name;
         this.user_name = user_name;

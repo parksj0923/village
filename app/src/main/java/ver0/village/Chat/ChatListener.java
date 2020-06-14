@@ -19,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import butterknife.internal.ListenerClass;
 import ver0.village.R;
@@ -31,8 +32,11 @@ public class ChatListener extends Worker {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = database.getReference("chat");
     DatabaseReference roomReference;
+    Query startQuery;
     ChatDatabase db;
     private Context context;
+    private int roomId = 0;
+    private String startKey = "";
 
     public ChatListener(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -44,16 +48,20 @@ public class ChatListener extends Worker {
     @Override
     public Result doWork() {
         String roomKey = getInputData().getString("key");
+//        String startKey = getInputData().getString("startKey");
         ChatRoom chatRoom = db.chatRoomDao().getChatRoom(roomKey);
-        int roomId = 0;
+        roomId = 0;
         if(chatRoom != null) {
             String userName = db.chatRoomDao().getUserName(roomKey);
             roomId = chatRoom.getId();
+            ChatData chatData = db.chatDataDao().getLatestChat(roomId);
+            startKey = chatData.getKey();
         }
         roomReference = databaseReference.child(roomKey);
         int finalRoomId = roomId;
+
         createNotificationChannel();
-        roomReference.addChildEventListener(new ChildEventListener() {
+        roomReference.orderByKey().startAt(startKey).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 String chatKey = dataSnapshot.getKey();

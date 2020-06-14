@@ -19,6 +19,8 @@ public class ChatRoom {
     private byte[] img_user;
     private byte[] img_item;
     private boolean active;
+    private int hour_price;
+    private int day_price;
 
     public void setId(Integer id) {
         this.id = id;
@@ -46,6 +48,12 @@ public class ChatRoom {
     }
     public void setActive(boolean flag) {
         this.active = flag;
+    }
+    public void setHour_price(int hour_price) {
+        this.hour_price = hour_price;
+    }
+    public void setDay_price(int day_price) {
+        this.day_price = day_price;
     }
 
     public Integer getId() {
@@ -75,12 +83,19 @@ public class ChatRoom {
     public boolean getActive() {
         return active;
     }
+    public int getHour_price() {
+        return hour_price;
+    }
+    public int getDay_price(){
+        return day_price;
+    }
 
     public ChatRoom(String key,
                     String user_name, String user_key,
                     String item_name, String item_key,
                     byte[] img_item, byte[] img_user,
-                    boolean active){
+                    boolean active,
+                    int hour_price, int day_price){
         this.key = key;
         this.user_name = user_name;
         this.user_key = user_key;
@@ -89,5 +104,7 @@ public class ChatRoom {
         this.img_item = img_item;
         this.img_user = img_user;
         this.active = active;
+        this.hour_price = hour_price;
+        this.day_price = day_price;
     }
 }

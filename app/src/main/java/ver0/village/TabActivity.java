@@ -177,12 +177,20 @@ public class TabActivity extends AppCompatActivity {
         return tabView;
     }
 
-    private Data createInputData(String key){
+    private Data createRoomInputData(String key){
         Data data = new Data.Builder()
                 .putString("key", key)
                 .build();
         return data;
     }
+
+//    private Data createChatInputData(String key, String startKey){
+//        Data data = new Data.Builder()
+//                .putString("key", key)
+//                .putString("startKey", startKey)
+//                .build();
+//        return data;
+//    }
 
     private class AddListener extends AsyncTask<Void, Void, Integer> {
         @Override
@@ -190,14 +198,14 @@ public class TabActivity extends AppCompatActivity {
             ChatDatabase db = ChatDatabase.getAppDatabase(getApplicationContext());
             List<String> chatRoomKeys = db.chatRoomDao().getChatRoomKeys();
             OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(RoomListener.class)
-                    .setInputData(createInputData("user_key")).build();
+                    .setInputData(createRoomInputData("1")).build();
             WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork(
                     "RoomListener",ExistingWorkPolicy.REPLACE, oneTimeWorkRequest);
 
             for(int i = 0; i < chatRoomKeys.size(); i++){
                 String key = chatRoomKeys.get(i);
                 oneTimeWorkRequest = new OneTimeWorkRequest.Builder(ChatListener.class)
-                        .setInputData(createInputData(key)).build();
+                        .setInputData(createRoomInputData(key)).build();
                 WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork(
                         "Chat" + key + "Listener",ExistingWorkPolicy.REPLACE, oneTimeWorkRequest);
             }

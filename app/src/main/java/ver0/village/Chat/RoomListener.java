@@ -52,7 +52,7 @@ public class RoomListener extends Worker {
                 ChatRoomFirebase chatRoomFirebase = dataSnapshot.getValue(ChatRoomFirebase.class);
                 String userKey = chatRoomFirebase.getUser_key();
                 String itemKey = chatRoomFirebase.getItem_key();
-                String chatRoomKey = chatRoomFirebase.getKey();
+                String chatRoomKey = dataSnapshot.getKey();
 
                 final byte[][] img = new byte[2][1];
                 StorageReference imgItemRef = storageReference.child("items/" + itemKey + ".jpg");
@@ -87,7 +87,8 @@ public class RoomListener extends Worker {
                         chatRoomKey,
                         chatRoomFirebase.getUser_name(), userKey,
                         chatRoomFirebase.getItem_name(), itemKey,
-                        img[0], img[1], true);
+                        img[0], img[1], true,
+                        chatRoomFirebase.getHour_price(), chatRoomFirebase.getDay_price());
                 db.chatRoomDao().insert(chatRoom);
 
                 // add work

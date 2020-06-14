@@ -2,28 +2,47 @@ package ver0.village.Item;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 
+import ver0.village.Chat.ChatInsideActivity;
+import ver0.village.Chat.ChatItem;
+import ver0.village.Chat.ChatRoomFirebase;
 import ver0.village.R;
+import ver0.village.database.ChatDatabase;
+import ver0.village.database.ChatRoom;
 import ver0.village.utils.NetworkTask;
 
 public class ItemDetailActivity extends AppCompatActivity {
@@ -38,7 +57,17 @@ public class ItemDetailActivity extends AppCompatActivity {
 
     //data
     String product_name, product_explain, nickname, image_name;
-    int product_price_hour, product_price_day, category, uploader_account_key, user_account_key;
+    int product_price_hour, product_price_day, category;
+    int uploader_account_key, user_account_key, item_key;
+    private byte[] data, data_;
+    private String chatRoomKey;
+
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference userDatabaseReference = database.getReference("user");
+    DatabaseReference chatDatabaseReference = database.getReference("chat");
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageReference = storage.getReference();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,16 +78,15 @@ public class ItemDetailActivity extends AppCompatActivity {
         user_account_key = sf.getInt("key", -1);
 
         Intent intent = getIntent(); /*데이터 수신*/
-
+        Log.e("check", "check");
         imageList = new ArrayList();
         anotherkeyList = new ArrayList();
         anotherimgList = new ArrayList();
         anothertitleList = new ArrayList();
-        int itemkey = intent.getExtras().getInt("key");
-        getItemInfoFromServer(itemkey);
+        item_key = intent.getExtras().getInt("key");
+        getItemInfoFromServer(item_key);
 
-
-
+        user_account_key = 0;
 
     }
 
@@ -210,8 +238,90 @@ public class ItemDetailActivity extends AppCompatActivity {
     }
 
     public void reservation(View view) {
-        Intent intent = new Intent(ItemDetailActivity.this, ItemReservationActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        startActivity(intent);
+//        Intent intent = new Intent(ItemDetailActivity.this, ItemReservationActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//        startActivity(intent);
+
+        ChatRoomFirebase roomData = new ChatRoomFirebase(
+                nickname,
+                uploader_account_key+"",
+                product_name,
+                item_key+"",
+                product_price_hour,
+                product_price_day);
+        userDatabaseReference.child(uploader_account_key+"").push().setValue(roomData);
+
+        Bitmap bitmap = ((BitmapDrawable) profile_img.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        data = baos.toByteArray();
+
+        Bitmap bitmap_ = ((BitmapDrawable) getDrawable(R.drawable.sample_camera)).getBitmap();
+        ByteArrayOutputStream baos_ = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos_);
+        data_ = baos.toByteArray();
+
+        UploadTask uploadTask = storageReference.child("users/" + uploader_account_key + ".jpg").putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+            }
+        });
+
+        UploadTask uploadTask_ = storageReference.child("items/" + item_key + ".jpg").putBytes(data_);
+        uploadTask_.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+            }
+        });
+        chatRoomKey = "user" + user_account_key + "item" + item_key;
+        ChatItem startChatItem = new ChatItem(
+                user_account_key+"",
+                "\'" + nickname +  "\'님의 \'" +
+                image_name + "\'의 예약이 확정되었습니다.",
+                Calendar.getInstance().getTime().getTime());
+
+        chatDatabaseReference.child(chatRoomKey).push().setValue(startChatItem);
+        storeChatRoom storeTask = new storeChatRoom();
+        storeTask.execute();
+    }
+
+    private class storeChatRoom extends AsyncTask<Void, Void, Integer> {
+        @Override
+        protected Integer doInBackground(Void... params) {
+
+            ChatRoom chatRoom = new ChatRoom(chatRoomKey,
+                    nickname, uploader_account_key+"",
+                    product_name, item_key+"",
+                    data_, data, true,
+                    product_price_hour, product_price_day);
+            ChatDatabase db = ChatDatabase.getAppDatabase(getApplicationContext());
+            db.chatRoomDao().insert(chatRoom);
+
+            return db.chatRoomDao().getChatRoom(chatRoomKey).getId();
+        }
+
+        @Override
+        protected void onPostExecute(Integer room_id) {
+            Intent intent = new Intent(ItemDetailActivity.this, ChatInsideActivity.class);
+            intent.putExtra("key", chatRoomKey);
+            intent.putExtra("room_id", room_id);
+            intent.putExtra("my_key", user_account_key+"");
+            startActivity(intent);
+        }
     }
 }

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +33,7 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 public class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<ChatRoomRecyclerViewAdapter.ViewHolder> {
     private ArrayList<ChatRoomItem> itemList = new ArrayList<ChatRoomItem>();
     Context context;
-
+    private String myKey;
     private static ChatRoomRecyclerViewAdapter.ClickListener clickListener;
 
     public interface ClickListener{
@@ -67,8 +68,9 @@ public class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<ChatRoomRe
         }
     }
 
-    public ChatRoomRecyclerViewAdapter(ArrayList<ChatRoomItem> itemList){
+    public ChatRoomRecyclerViewAdapter(ArrayList<ChatRoomItem> itemList, String key){
         this.itemList = itemList;
+        this.myKey = key;
     }
 
     @Override
@@ -112,8 +114,9 @@ public class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<ChatRoomRe
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ChatInsideActivity.class);
-                Drawable userDraw = itemList.get(position).getImg_user();
-                Drawable itemDraw = itemList.get(position).getImg_item();
+                ChatRoomItem chatRoomItem = itemList.get(position);
+                Drawable userDraw = chatRoomItem.getImg_user();
+                Drawable itemDraw = chatRoomItem.getImg_item();
                 Bitmap bitmap = ((BitmapDrawable)userDraw).getBitmap();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
@@ -126,7 +129,11 @@ public class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<ChatRoomRe
                 intent.putExtra("userImg", userImg);
                 intent.putExtra("itemImg", itemImg);
                 intent.putExtra("id", position);
-                WorkManager.getInstance(context).cancelUniqueWork("ChatListener");
+                intent.putExtra("key", chatRoomItem.getKey());
+                intent.putExtra("room_id", chatRoomItem.getId());
+                intent.putExtra("my_key", myKey);
+                WorkManager.getInstance(context).cancelUniqueWork(
+                        "Chat" + chatRoomItem.getKey() + "Listener");
                 context.startActivity(intent);
             }
         });
@@ -149,12 +156,8 @@ public class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<ChatRoomRe
                     public void onClick(View v) {
                         ChatRoomItem chatRoomItem = itemList.get(position);
                         itemList.remove(position);
-                        String key = chatRoomItem.getKey();
-                        ChatDatabase db = ChatDatabase.getAppDatabase(context);
-                        ChatRoom chatRoom = db.chatRoomDao().getChatRoom(key);
-                        Integer roomId = chatRoom.getId();
-                        db.chatDataDao().deleteRoomChat(roomId);
-                        db.chatRoomDao().setActive(key, false);
+                        removeChat removeChatTask = new removeChat();
+                        removeChatTask.execute(chatRoomItem.getKey());
                         notifyDataSetChanged();
                         snackbar.dismiss();
                     }
@@ -172,9 +175,9 @@ public class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<ChatRoomRe
         });
     }
 
-    public void addItem(String key, String item_name, String user_name, String last_chat, int last_chattime, int alarmnum, Drawable img_item, Drawable img_user) {
+    public void addItem(Integer id, String key, String item_name, String user_name, String last_chat, int last_chattime, int alarmnum, Drawable img_item, Drawable img_user) {
         ChatRoomItem item = new ChatRoomItem(
-                key,
+                id, key,
                 item_name, user_name, last_chat,
                 last_chattime, alarmnum, img_item, img_user);
         itemList.add(item);
@@ -189,6 +192,20 @@ public class ChatRoomRecyclerViewAdapter extends RecyclerView.Adapter<ChatRoomRe
     {
         // Create the Snackbar
 
+    }
+    private class removeChat extends AsyncTask<String, String, Integer> {
+        @Override
+        protected Integer doInBackground(String... chatKey) {
+            ChatDatabase db = ChatDatabase.getAppDatabase(context);
+            ChatRoom chatRoom = db.chatRoomDao().getChatRoom(chatKey[0]);
+            db.chatDataDao().deleteRoomChat(chatRoom.getId());
+            db.chatRoomDao().setActive(chatKey[0], false);
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+        }
     }
 
 }

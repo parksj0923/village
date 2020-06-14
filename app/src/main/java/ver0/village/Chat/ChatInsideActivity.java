@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -44,11 +46,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import ver0.village.R;
+import ver0.village.database.ChatData;
+import ver0.village.database.ChatDatabase;
+import ver0.village.database.ChatRoom;
 
 public class ChatInsideActivity extends AppCompatActivity {
 
@@ -65,10 +72,15 @@ public class ChatInsideActivity extends AppCompatActivity {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = database.getReference("chat");
     DatabaseReference roomReference;
+    Query startQuery;
     private ChildEventListener chatEventListener;
     private ChatRecyclerViewAdapter chatRecyclerViewAdapter;
-
+    private Integer chatRoomId;
     private String chatRoomKey;
+    private Bitmap userImg, itemImg;
+    private String userName, prodName;
+    private Integer hour_price, day_price;
+    private ChatDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,21 +88,18 @@ public class ChatInsideActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chatinside);
         Intent intent = getIntent();
         Integer id = intent.getIntExtra("id", 0);
-        byte[] byteUserImg = intent.getByteArrayExtra("userImg");
-        byte[] byteItemImg = intent.getByteArrayExtra("itemImg");
-        Bitmap userImg = BitmapFactory.decodeByteArray(byteUserImg, 0, byteUserImg.length);
-        Bitmap itemImg = BitmapFactory.decodeByteArray(byteItemImg, 0, byteItemImg.length);
-        Integer user_id;
-        my_key = "test_id_" + id;
-        if (id == 0){
-            user_id = 1;
-        } else {
-            user_id = 0;
-        }
+        chatRoomId = intent.getIntExtra("room_id", 0);
+        chatRoomKey = intent.getStringExtra("key");
+        my_key = intent.getStringExtra("my_key");
+        loadChatRoom loadChatRoomTask = new loadChatRoom();
+        loadChatRoomTask.execute();
 
+        db = ChatDatabase.getAppDatabase(getApplicationContext());
+
+        my_key = id+"";
         chatRoomKey = "test_id_0_test_id_1_item_key";
         roomReference = databaseReference.child(chatRoomKey);
-        chatRecyclerViewAdapter = new ChatRecyclerViewAdapter(this, chatItemList, my_key, userImg);
+//        startQuery = roomReference.orderByKey().startAt();
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar_title = (TextView)findViewById(R.id.toolbar_title);
@@ -101,8 +110,7 @@ public class ChatInsideActivity extends AppCompatActivity {
         product_img = (ImageView)findViewById(R.id.image_product);
 
         setSupportActionBar(toolbar);
-        toolbar_title.setText("박성주");
-        product_img.setImageBitmap(itemImg);
+
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
@@ -113,7 +121,6 @@ public class ChatInsideActivity extends AppCompatActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
-        recyclerView.setAdapter(chatRecyclerViewAdapter);
 
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,8 +153,10 @@ public class ChatInsideActivity extends AppCompatActivity {
                     chatItem.setRead(true);
                     dataSnapshot.getRef().setValue(chatItem);
                 }
-//                dataSnapshot.getRef().removeValue();
-
+                ChatData chatData = new ChatData(key, sender, chatItem.getMessage(),
+                        chatItem.getDatetime(), chatItem.getRead(), chatRoomId);
+                storeChat storeChatTask = new storeChat();
+                storeChatTask.execute(chatData);
 
             }
 
@@ -188,16 +197,17 @@ public class ChatInsideActivity extends AppCompatActivity {
         Constraints constraints = constraintsBuilder.build();
 
         OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(ChatListener.class)
-                .setInputData(createInputData("test_id_0_test_id_1_item_key"))
+                .setInputData(createInputData(chatRoomKey))
                 .setConstraints(constraints).build();
         WorkManager.getInstance(getApplicationContext()).enqueueUniqueWork(
-                "ChatListener", ExistingWorkPolicy.REPLACE, oneTimeWorkRequest);
+                "Chat" + chatRoomKey + "Listener", ExistingWorkPolicy.REPLACE, oneTimeWorkRequest);
         roomReference.removeEventListener(chatEventListener);
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
+        WorkManager.getInstance(getApplicationContext()).cancelUniqueWork("Chat"+ chatRoomKey +"Listener");
         roomReference.addChildEventListener(chatEventListener);
     }
 
@@ -240,6 +250,60 @@ public class ChatInsideActivity extends AppCompatActivity {
                 .putString("key", key)
                 .build();
         return data;
+    }
+
+
+//
+//    private class createQuery extends AsyncTask<Void, Void, Integer> {
+//        @Override
+//        protected Integer doInBackground(Void... params) {
+//
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Integer result) {
+//        }
+//    }
+
+    private class loadChatRoom extends AsyncTask<Void, Void, Integer> {
+        @Override
+        protected Integer doInBackground(Void... params) {
+            ChatDatabase db = ChatDatabase.getAppDatabase(getApplicationContext());
+            ChatRoom chatRoom = db.chatRoomDao().getChatRoom(chatRoomKey);
+            user_key = chatRoom.getUser_key();
+            item_key = chatRoom.getItem_key();
+            byte[] byteUserImg = chatRoom.getImg_user();
+            byte[] byteItemImg = chatRoom.getImg_item();
+            userImg = BitmapFactory.decodeByteArray(byteUserImg, 0, byteUserImg.length);
+            itemImg = BitmapFactory.decodeByteArray(byteItemImg, 0, byteItemImg.length);
+            userName = chatRoom.getUser_name();
+            prodName = chatRoom.getItem_name();
+            hour_price = chatRoom.getHour_price();
+            day_price = chatRoom.getDay_price();
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            toolbar_title.setText("박성주");
+            product_img.setImageBitmap(itemImg);
+            chatRecyclerViewAdapter = new ChatRecyclerViewAdapter(getApplicationContext(), chatItemList, my_key, userImg);
+            recyclerView.setAdapter(chatRecyclerViewAdapter);
+
+        }
+    }
+
+    private class storeChat extends AsyncTask<ChatData, ChatData, Integer> {
+        @Override
+        protected Integer doInBackground(ChatData... chatData) {
+            db.chatDataDao().insert(chatData[0]);
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+
+        }
     }
 
 }
